@@ -1,1 +1,1 @@
-Collection of programs written in CSX class
+Collection of programs written in CSX
