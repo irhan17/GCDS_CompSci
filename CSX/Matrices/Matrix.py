@@ -332,38 +332,38 @@ class Matrix:
 
         #Starts with column index 0 and iterates through each row
         start_index = 0 
-        for row in range(rows):
-            if start_index >= cols:
-                break
-            row_to_modify = row
-            #Finds a row with a non-zero element in the first column by going through each row
-            while abs(rref[row_to_modify][start_index]) < 1e-10:   
-                row_to_modify += 1
-                if row_to_modify == rows:
-                    row_to_modify = row
-                    start_index += 1    
-                    if start_index == cols:
-                        break
-            if start_index == cols:
-                break
-            #Swaps the current row with the row to modify to bring the largest element value to the top
-            if row_to_modify != row:
-                rref[row] = rref[row_to_modify]
-                rref[row_to_modify] = rref[row]
+        for col in range(cols):
+            proper_index = False
+            for row in range(start_index, rows):
+                #Finds the first non-zero element and swaps it to be the first row
+                if abs(rref[row][col]) > 1e-10:
+                    proper_index = True
+                    if row != start_index:
+                        rref[row], rref[start_index] = rref[start_index], rref[row]
+                    break
+            #Iterates to next column if pivot isn't found
+            if not proper_index:
+                continue
             #Divides the row to modify by the largest absolute element value to make the first element equal to 1
-            element = rref[row][start_index]
-            #Avoid division by 0
-            if abs(element) > 1e-10:
-                for j in range(cols):
-                    rref[row][j] /= element
+            element = rref[start_index][col]
+            for j in range(cols):
+                rref[start_index][j] /= element
             #Subtracts multiples of the row from other rows to make all other elements in row equal to 0
-            for i in range(rows):
-                if i != row:
-                    factor = rref[i][start_index]
+            for row in range(rows):
+                if row != start_index:
+                    factor = rref[row][col]
                     for j in range(cols):
-                        rref[i][j] -= factor * rref[row][j]
-            #Iterates to next index value
+                        rref[row][j] -= factor * rref[start_index][j]
+            #Continues to next row
             start_index += 1
+            if start_index == rows:
+                break
+
+        #Fixes rounding errors - ensures that very small decimal numbers are essentially set to be 0.0
+        for row in range(rows):
+            for col in range(cols):
+                if abs(rref[row][col]) < 1e-10:
+                    rref[row][col] = 0.0
         return rref, True
     
     def invert(self, rref, valid_answer):
