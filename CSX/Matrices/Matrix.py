@@ -1,7 +1,7 @@
 #Name: Irhan Iftikar
 #Date: November/December 2024
 #Description: CSX Assignment - Matrices
-#Bonuses: Determinant, Transpose, REF, Integer Power, Rank, Orthogonal Check, Dot Product, Hadamard Product, Frobenius Norm
+#Bonuses: Menu + User Interface (UI), Determinant, Transpose, REF, Integer Power, Rank, Orthogonal Check, Dot Product, Hadamard Product, Frobenius Norm
 #Bugs: No notable bugs found in program
 #Sources: Several Internet Sources for Syntax (w3schools, Stack Overflow, GeeksForGeeks, etc.)
 
