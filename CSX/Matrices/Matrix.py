@@ -262,14 +262,14 @@ class Matrix:
         if self.cols != matrix2.rows:
             print("Matrices cannot be multipled as columns in the first matrix is not equal to rows in the second matrix.")
             return None
-        result = [[0 for _ in range(self.rows)] for _ in range(matrix2.cols)]
-        print("Product of Matrices: ")
+        result = [[0 for _ in range(matrix2.cols)] for _ in range(self.rows)]
         for i in range(self.rows):
             for j in range(matrix2.cols):
                 for k in range(self.cols):
                     result[i][j] += self.data[i][k] * matrix2.data[k][j]
-                print(result[i][j], end = " ")
-            print()
+        print("Product of Matrices: ")
+        for row in result:
+            print(row)
         print("\n")
 
     def scalarTimesRow(self, scalar, row):
@@ -315,7 +315,7 @@ class Matrix:
         else:
             print("The entered row(s) don't exist in the matrix.")
         print("\n")
-        
+    
     def rowreduce(self):
         #Description: Function that displays the Reduced Row Echelon Form (RREF) of a matrix
         #Parameters - self
