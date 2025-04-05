@@ -1,9 +1,9 @@
 #Name: Irhan Iftikar
-#Date: March 2025
+#Date: April 2025
 #Description: CSX Assignment - Orbits
-#Bonuses: Verifies all three of Kepler's Laws, Applies conservation of angular momentum to verify Kepler's Second Law, Shows energy conservation throughout the orbit
+#Bonuses: Verifies all three of Kepler's Laws, Applies conservation of angular momentum to verify Kepler's Second Law, Shows energy conservation throughout the orbit, Models the orbit of Mercury
 #Bugs: No notable bugs found in program
-#Sources: Several Internet Sources for Syntax (w3schools, Stack Overflow, GeeksForGeeks, etc.) and sources for physics formulas and properties
+#Sources: Several internet sources for syntax (w3schools, Stack Overflow, GeeksForGeeks, etc.) and sources for physics formulas and properties
 
 #Imports libraries used in the program
 import matplotlib.pyplot as plt
@@ -55,6 +55,7 @@ class model:
             self.array.append(new_line)
             self.time += self.dt
 
+        #Calls the other functions in the program
         dataset = self.array
         self.graph(dataset, self.iterations)
         times = [row[0] for row in dataset]
@@ -67,11 +68,11 @@ class model:
 
     #Verifies Kepler's First Law
     def kepler_first_law(self, x_positions, y_positions):
-        #Calculates orbital properties to verify that the path is elliptical through its eccentricity
+        #Calculates orbital properties to verify that the path is elliptical through its eccentricity value
         radial_distances = [math.sqrt((x - self.sun_x)**2 + (y - self.sun_y)**2) 
                            for x, y in zip(x_positions, y_positions)]
-        perihelion = min(radial_distances)
-        aphelion = max(radial_distances)
+        perihelion = min(radial_distances) #Where the planet is closest to the Sun
+        aphelion = max(radial_distances)  #Where the planet is farthest from the Sun
         eccentricity = (aphelion - perihelion) / (aphelion + perihelion)
         #Verifies the sun is at a foci of the ellipse by comparing sun's position to the foci
         focus_distance = ((perihelion + aphelion) / 2) * eccentricity
@@ -127,8 +128,8 @@ class model:
             expected_period = 2 * math.pi * math.sqrt(semi_major_axis**3 / (self.G * self.mass_host))
             percent_difference = abs(orbital_period - expected_period) / expected_period * 100
             print("\nKepler's Third Law: The square of a planet's orbital period is proportional to the cube of the semi-major axis of its orbit.")
-            print(f"The calculated orbital period is {orbital_period:.2f} seconds, with the expected orbital period {expected_period:.4e} seconds.")
-            print(f"Verification: Since the perfect difference is {percent_difference:.4f}%, Kepler's Third Law is proven.")
+            print(f"The calculated orbital period is {orbital_period:.2f} seconds, with the expected orbital period {expected_period:.4e} seconds (found using the formula).")
+            print(f"Verification: Since the percent difference is {percent_difference:.4f}%, Kepler's Third Law is proven.")
         else:
             print("There isn't enough orbital data to evaluate - increase simulation time.")
 
@@ -154,7 +155,7 @@ class model:
         average_total_energy = sum(total_energies) / len(total_energies)
         maximum_deviation = max([abs(e - average_total_energy) for e in total_energies])
         percent_deviation = (maximum_deviation / abs(average_total_energy)) * 100
-        print("Energy Conservation: The total energy of the system (kinetic + potential) should be conserved.")
+        print("\nEnergy Conservation: The total energy of the system (kinetic + potential) should be conserved.")
         print(f"Average total energy: {average_total_energy:.4e} J. The maximum deviation is {maximum_deviation:.4e} J with a percent deviation of ({percent_deviation:.6f}%)")
         print("Verification: The small deviation shows conservation of energy. This can also be graphically shown.")
         #Visualizes the energy conservation over time
@@ -183,10 +184,10 @@ class model:
         max_y = max(abs(max(yValues)), abs(min(yValues)))
         max_dim = max(max_x, max_y) * 1.1
         plt.axes(xlim=(-max_dim, max_dim), ylim=(-max_dim, max_dim))
-        plt.plot(xValues, yValues, linestyle='--', color='#444444', label='Planet Orbit')
+        plt.plot(xValues, yValues, linestyle='--', color='#444444', label='Planet (Mercury)')
         plt.plot(self.sun_x, self.sun_y, 'ro', markersize=10, label='Star (Sun)')
         plt.grid(True, which='major', axis='both')
-        plt.title("Elliptical Orbit - Irhan Iftikar")
+        plt.title("Planet Orbit - Irhan Iftikar")
         plt.xlabel('X Position (m)')
         plt.ylabel('Y Position (m)')
         plt.legend()
