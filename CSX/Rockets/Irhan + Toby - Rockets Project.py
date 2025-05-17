@@ -8,9 +8,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-#Function that converts pressure to velocity using the formula we found
+#Function that converts pressure to velocity using the formula provided
 def velocity(pressure):
-    return 0.154*pressure + 12.5
+    return 0.226*pressure + 5.2
+    #return 0.173*pressure + 6.87 (2024 data group #1)
+    #return 0.226*pressure + 5.2 (2025 data group B - seems more accurate)
 
 #Function that calculates the trajectory of the rocket
 def calculate_trajectory(v_i, angle, launch_position, g=10, time_points = 100):
@@ -32,7 +34,7 @@ def calculate_trajectory(v_i, angle, launch_position, g=10, time_points = 100):
 #Function that aims to hit the goal line and finds the launch angle and pressure given the input of a yard line to launch from
 def goal_line(launch_position):
     #Establishes minimum and maximum values for pressure and angle
-    min_pressure, max_pressure = 30, 150
+    min_pressure, max_pressure = 30, 120
     pressure_step = 1
     min_angle, max_angle = 0, 90
     angle_step = 1
@@ -63,7 +65,7 @@ def field_goal(angle):
     launch_position = 30 
     goal_post_position = -10 #Goal posts are 10 yards behind the goal line
     goal_post_height = 10 * 0.33333333333 #Converts 10 feet to yards
-    min_pressure, max_pressure = 30, 150
+    min_pressure, max_pressure = 30, 120
     pressure_step = 0.1
     best_pressure = None
     min_height_diff = float('inf')
@@ -133,7 +135,7 @@ def animate(v_i, angle, launch_position):
 #Main function that runs the program by calling the functions
 def main():
     #Part 1: Finds optimal angle and pressure for a launch from a given yard line
-    launch_position = 30
+    launch_position = 35
     angle, pressure = goal_line(launch_position)
     #Part 2: Finds pressure for a launch angle from the 30 yard line for a given launch angle
     test_angle = 45
