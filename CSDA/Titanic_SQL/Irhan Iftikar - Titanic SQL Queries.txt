@@ -1,0 +1,97 @@
+﻿--Note: My table containing the .csv Titanic data file is called “data” in my SQLiteStudio
+
+
+--1a. How many female passengers were there on board?
+SELECT COUNT(*) AS total FROM data WHERE sex = 'female';
+
+
+--1b. How many male passengers embarked from Southampton?
+SELECT COUNT(*) AS total FROM data WHERE sex = 'male' AND embarked = 'S';
+
+
+--1c. How many passengers are teenagers?
+SELECT COUNT(*) AS total FROM data WHERE CAST(Age AS REAL) >= 13 AND CAST(Age AS REAL) <= 18;
+--The code above counting the inequality for real numbers is needed to account for the data entry where PassengerId 112 has age 14.5 years
+
+
+--1d. How many passengers have no registered age data?
+SELECT COUNT(*) AS total FROM data WHERE Age IN ('');
+
+
+--1e. How many passengers paid a fare greater than $30?
+SELECT COUNT(*) AS total FROM data WHERE CAST(fare AS REAL) > 30;
+
+
+--1f. What is the maximum age of a passenger?
+SELECT MAX(CAST(Age AS REAL)) AS maximum FROM data;
+
+
+--1g. What is the minimum fare price paid?
+SELECT MIN(CAST(fare AS REAL)) AS minimum FROM data;
+
+
+--1h. What is the maximum fare price for an 18 year old female embarking from Queenstown?
+SELECT MAX(CAST(fare AS REAL)) AS maximum FROM data WHERE Age IN ('18') AND sex = 'female' AND embarked = 'Q';
+
+
+--1i. What is the minimum fare price for an 18 year old male embarking from Cherbourg?
+SELECT MIN(CAST(fare AS REAL)) AS minimum FROM data WHERE Age IN ('18') AND sex = 'male' AND embarked = 'C';
+
+
+--2a. What is the average fare for all passengers? Round to the nearest hundredth.
+SELECT ROUND(AVG(CAST(fare AS REAL)), 2) AS average FROM data;
+
+
+--2b. What is the average age of all passengers? Round to the nearest tenth.
+SELECT ROUND(AVG(CAST(Age AS REAL)), 1) AS average FROM data WHERE Age NOT IN ('');
+
+
+--2c. What is the average fare for males versus females? Round to the nearest tenth.
+SELECT sex, ROUND(AVG(CAST(fare AS REAL)), 1) AS average FROM data GROUP BY sex;
+
+
+--2d. What is the average fare for people in the age ranges of 0-18, 18-36, and 36+? Round to the nearest hundredth.
+SELECT CASE WHEN CAST(Age AS REAL) <= 18 THEN '0–18' WHEN CAST(Age AS REAL) <= 36 THEN '18–36' ELSE '36+' END AS age_group, 
+ROUND(AVG(CAST(fare AS REAL)), 2) AS average FROM data WHERE Age NOT IN ('') GROUP BY age_group;
+
+
+--2e. What is the average fare cost for survivors vs. non-survivors? Round to the nearest hundredth.
+SELECT survived, ROUND(AVG(CAST(fare AS REAL)), 2) AS average FROM data GROUP BY survived;
+
+
+--2f. What is the average cost for female passengers aged 36 who embarked from Southampton? Round to the nearest hundredth.
+SELECT ROUND(AVG(CAST(fare AS REAL)), 2) AS average FROM data WHERE sex = 'female'AND Age in ('36') AND embarked = 'S';
+
+
+--2g. What is the average fare cost for a passenger in first class? Round to the nearest hundredth.
+SELECT ROUND(AVG(CAST(fare AS REAL)), 2) AS average FROM data WHERE Pclass IN ('1');
+
+
+--2h. How many passengers paid for a fare less than the average?
+SELECT COUNT(*) AS total FROM data WHERE CAST(fare AS REAL) < (SELECT AVG(CAST(fare AS REAL)) FROM data);
+
+
+--3a. What is the difference between, if any difference exists, the SUM and TOTAL functions?
+--SUM ignores Null values and returns Null if there are no non-Null rows, whereas TOTAL treats Null as 0.0 and returns 0.0 if there are no non-Null rows.
+
+
+--3b. What is the total fare paid by all passengers? Round to the nearest hundredth.
+SELECT ROUND(SUM(CAST(fare AS REAL)), 2) AS total FROM data;
+
+
+--3c. What is the total fare costs for the age ranges of 0-18, 18-36, and 36+? Round to the nearest hundredth.
+SELECT CASE WHEN CAST(Age AS REAL) <= 18 THEN '0–18' WHEN CAST(Age AS REAL) <= 36 THEN '18–36' ELSE '36+' END AS age_group,
+ROUND(SUM(CAST(fare AS REAL)), 2) AS total FROM data WHERE Age NOT IN ('') GROUP BY age_group;
+
+
+--3d. See if you can write a query using the sum function that counts the number of female passengers that embark from Southampton. Yes, we should use the COUNT() function, but I want to see if you can achieve this. Is it possible?
+SELECT SUM(CASE WHEN sex = 'female' AND embarked = 'S' THEN 1 ELSE 0 END) AS total FROM data;
+
+
+--Enrichment and Extension: For those that finish this assignment and want to take this further. Look up how to export your SQL query results to a .csv file. Run a SQL query that collects a list of all male passengers aged 13-18. Preclude the data points with NULL entries in the Age or Fare column. Export this result, and then observe the file using Excel. Use descriptive statistics to find the mean, median, mode, IQR, and standard deviation of this sample set. BE SURE THAT YOU USE STDEV.S since this is a sample. Write a paragraph detailing this group.
+SELECT * FROM data WHERE sex = 'male' AND Age NOT IN ('') AND Fare NOT IN ('') AND CAST(Age AS REAL) BETWEEN 13 AND 18;
+--Note: The Google Sheets file where the descriptive statistics analysis occurs is attached on Google Classroom.
+
+
+--Further Extension: Research basic probability calculations. You will need to do this in Excel versus SQL. Answer this question….What is the probability that a person in first class survives the Titanic sinking? What is the probability that a woman versus a man survived the accident? Can you write a program, Python or in Excel, that requests a cabin number and then outputs the probability someone with this ticket assignment survives the Titanic sinking?
+--Note: The Google Sheets file where the basic probability calculations occur is attached on Google Classroom.
