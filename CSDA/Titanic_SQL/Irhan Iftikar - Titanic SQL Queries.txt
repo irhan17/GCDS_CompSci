@@ -91,7 +91,3 @@ SELECT SUM(CASE WHEN sex = 'female' AND embarked = 'S' THEN 1 ELSE 0 END) AS tot
 --Enrichment and Extension: For those that finish this assignment and want to take this further. Look up how to export your SQL query results to a .csv file. Run a SQL query that collects a list of all male passengers aged 13-18. Preclude the data points with NULL entries in the Age or Fare column. Export this result, and then observe the file using Excel. Use descriptive statistics to find the mean, median, mode, IQR, and standard deviation of this sample set. BE SURE THAT YOU USE STDEV.S since this is a sample. Write a paragraph detailing this group.
 SELECT * FROM data WHERE sex = 'male' AND Age NOT IN ('') AND Fare NOT IN ('') AND CAST(Age AS REAL) BETWEEN 13 AND 18;
 --Note: The Google Sheets file where the descriptive statistics analysis occurs is attached on Google Classroom.
-
-
---Further Extension: Research basic probability calculations. You will need to do this in Excel versus SQL. Answer this question….What is the probability that a person in first class survives the Titanic sinking? What is the probability that a woman versus a man survived the accident? Can you write a program, Python or in Excel, that requests a cabin number and then outputs the probability someone with this ticket assignment survives the Titanic sinking?
---Note: The Google Sheets file where the basic probability calculations occur is attached on Google Classroom.
