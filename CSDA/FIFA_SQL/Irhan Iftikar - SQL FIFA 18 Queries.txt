@@ -51,5 +51,7 @@ CAST("GK Kicking" AS REAL) +
 CAST("GK Positioning" AS REAL) +
 CAST("GK Reflexes" AS REAL)) AS goalkeeper_score
 FROM fifa18_clean ORDER BY goalkeeper_score DESC, Overall DESC LIMIT 10;
+
+
 --10. Which clubs have the most elite players (min. 85 overall)?
 SELECT Club, COUNT(*) AS elite_players FROM fifa18_clean WHERE CAST(Overall AS REAL) > 85 GROUP BY Club ORDER BY elite_players DESC LIMIT 10;
