@@ -1,0 +1,59 @@
+﻿--Note: My table containing the .csv FIFA 18 data file is called “fifa18_clean” in SQLiteStudio
+
+
+--1. Who are the best set-piece specialists?
+SELECT Name, Club, Nationality, (CAST("Free Kick Accuracy" AS REAL) + CAST(Penalties AS REAL)) AS set_piece_score FROM fifa18_clean ORDER BY set_piece_score DESC LIMIT 10;
+
+
+--2. Which countries have the highest combined squad value?
+SELECT Nationality, ROUND(SUM(CAST("Value (€)" AS REAL)),2) AS total_value_euros FROM fifa18_clean GROUP BY Nationality ORDER BY total_value_euros DESC LIMIT 5;
+
+
+--3. Which clubs are the most internationally diverse?
+SELECT Club, COUNT(DISTINCT Nationality) AS distinct_nationalities, COUNT(*) AS total_players FROM fifa18_clean WHERE Club NOT IN ('') GROUP BY Club ORDER BY distinct_nationalities DESC, total_players DESC LIMIT 10;
+
+
+--4. Which clubs have the highest overall players as a ratio of the wages they pay them?
+SELECT Club, ROUND(SUM(Overall) / SUM(CAST("Wage (€)" AS REAL)), 4) AS overall_per_euro FROM fifa18_clean GROUP BY Club ORDER BY overall_per_euro DESC LIMIT 10;
+
+
+--5. Which countries have the highest average potential?
+SELECT Nationality, COUNT(*) AS players, ROUND(AVG(Potential), 2) AS average_potential FROM fifa18_clean GROUP BY Nationality HAVING COUNT(*) >= 100 ORDER BY average_potential DESC LIMIT 10;
+
+
+--6. Which clubs have the highest combined wage bill?
+SELECT Club, ROUND(SUM(CAST("Wage (€)" AS REAL)), 2) AS total_wage_euros, COUNT(*) AS players FROM fifa18_clean GROUP BY Club ORDER BY total_wage_euros DESC LIMIT 10;
+
+
+--7. Which players are the biggest potential risers (difference between current overall and future potential)?
+SELECT Name, Club, Nationality, Overall, Potential, (Potential - Overall) AS potential_gap FROM fifa18_clean ORDER BY potential_gap DESC, Potential DESC LIMIT 10;
+
+
+--8. Which players are the most position-adaptable across the pitch?
+SELECT Name, Club, Nationality,
+(CAST(CB AS REAL) +
+CAST(RB AS REAL) +
+CAST(LB AS REAL) +
+CAST(CDM AS REAL) +
+CAST(CM AS REAL) +
+CAST(CAM AS REAL) +
+CAST(LW AS REAL) +
+CAST(RW AS REAL) +
+CAST(ST AS REAL)) AS position_adaptability_score
+FROM fifa18_clean ORDER BY position_adaptability_score DESC LIMIT 10;
+
+
+--9. Which players are the best goalkeepers (combined GK diving, handling, kicking, positioning, and reflexes)?
+SELECT Name, Club, Nationality, Overall,
+(CAST("GK Diving" AS REAL) +
+CAST("GK Handling" AS REAL) +
+CAST("GK Kicking" AS REAL) +
+CAST("GK Positioning" AS REAL) +
+CAST("GK Reflexes" AS REAL)) AS goalkeeper_score
+FROM fifa18_clean ORDER BY goalkeeper_score DESC, Overall DESC LIMIT 10;
+--10. Which clubs have the most elite players (min. 85 overall)?
+SELECT Club, COUNT(*) AS elite_players FROM fifa18_clean WHERE CAST(Overall AS REAL) > 85 GROUP BY Club ORDER BY elite_players DESC LIMIT 10;
+
+
+--Extra (Data visualization in Google Sheets): 
+Data visualization for both club and country versus combined squad value as a pie chart is included in the Google Sheets attached on Classroom, as is club versus number of elite players as a bar chart.
